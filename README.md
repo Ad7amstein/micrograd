@@ -1,6 +1,7 @@
 # micrograd
 
-## To-Do:
+## To-Do
+
 - Engine (Value Class)
 - NN Module (Neuron Class)
 - NN Module (Layer Class)
