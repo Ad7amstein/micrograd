@@ -11,3 +11,4 @@
 - NN Module (Neuron Class)
 - NN Module (Layer Class)
 - NN Module (MLP Class)
+- documentation: make a nice README :)
