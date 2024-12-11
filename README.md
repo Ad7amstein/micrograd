@@ -2,7 +2,8 @@
 
 ## WIP
 
-- Engine (Value Class)
+- Engine (Value Class): add `relu` and `tanh` functions
+- documentation: add doc strings to all functions and classes
 - Testing
 
 ## To-Do
