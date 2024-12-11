@@ -218,3 +218,103 @@ class TestEngine(unittest.TestCase):
         val3 = -val1 / -1
         self.assertIsInstance(val3, Value)
         self.assertEqual(val3.data, 7)
+
+    def test_children(self):
+        """To be filled"""
+        val1 = Value(5)
+        self.assertIsInstance(val1.prev, set)
+        self.assertEqual(val1.prev, set())
+
+        val2 = Value(2)
+        val3 = val1 + val2
+        self.assertEqual(val3.prev, set((val1, val2)))
+        val3 = val1 * val2
+        self.assertEqual(val3.prev, set((val1, val2)))
+        val3 = val1**val2
+        self.assertEqual(val3.prev, set((val1,)))
+        val3 = val2**val1
+        self.assertEqual(val3.prev, set((val2,)))
+
+    def test_op(self):
+        """To be filled"""
+        val1 = Value(4)
+        self.assertIsInstance(val1.op, str)
+        self.assertEqual(val1.op, "")
+
+        val2 = Value(3)
+        val3 = val1 + val2
+        self.assertEqual(val3.op, "+")
+        val3 = val1 - val2
+        self.assertEqual(val3.op, "+")
+        val3 = val1 * val2
+        self.assertEqual(val3.op, "*")
+        val3 = val1 / val2
+        self.assertEqual(val3.op, "*")
+        val3 = val1**val2
+        self.assertEqual(val3.op, f"**{val2}")
+
+    def test_backward(self):
+        """To be filled"""
+        val1 = Value(2)
+        self.assertEqual(val1.grad, 0)
+        val2 = Value(3)
+        self.assertEqual(val2.grad, 0)
+        val3 = val1 + val2
+        self.assertEqual(val3.grad, 0)
+        val3.backward()
+        self.assertEqual(val1.grad, 1)
+        self.assertEqual(val2.grad, 1)
+        self.assertEqual(val3.grad, 1)
+
+        val1 = Value(2)
+        val2 = Value(3)
+        val3 = val1 * val2
+        val3.backward()
+        self.assertEqual(val1.grad, 3)
+        self.assertEqual(val2.grad, 2)
+        self.assertEqual(val3.grad, 1)
+
+        val1 = Value(2)
+        val3 = -val1
+        val3.backward()
+        self.assertEqual(val1.grad, -1)
+        self.assertEqual(val3.grad, 1)
+
+        val1 = Value(2)
+        val2 = Value(3)
+        val3 = val1 - val2
+        val3.backward()
+        self.assertEqual(val1.grad, 1)
+        self.assertEqual(val2.grad, -1)
+        self.assertEqual(val3.grad, 1)
+
+        val1 = Value(2)
+        val2 = Value(3)
+        val3 = val1**val2
+        val3.backward()
+        self.assertAlmostEqual(val1.grad.data, 3 * (2**2))
+        self.assertEqual(val3.grad, 1)
+
+        val1 = Value(2)
+        val2 = Value(3)
+        val3 = val1 / val2
+        val3.backward()
+        self.assertAlmostEqual(val1.grad, 1 / 3)
+        self.assertEqual(val2.grad.data, -2 * 3**-2)
+        self.assertEqual(val3.grad, 1)
+
+        a = Value(2.0)
+        b = Value(-3.0)
+        c = Value(10)
+        e = a * b
+        d = e + c
+        f = Value(-2.0)
+        l = d * f
+        l.backward()
+        self.assertAlmostEqual(l.grad, 1)
+        self.assertAlmostEqual(f.grad, 4)
+        self.assertAlmostEqual(d.grad, -2)
+        self.assertAlmostEqual(e.grad, -2)
+        self.assertAlmostEqual(c.grad, -2)
+        self.assertAlmostEqual(a.grad, 6)
+        self.assertAlmostEqual(b.grad, -4)
