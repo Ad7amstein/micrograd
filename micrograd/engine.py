@@ -1,11 +1,20 @@
-"""To be filled"""
+"""
+This is the main file for the micrograd engine,
+which is a simple autograd engine for educational purposes.
+"""
 
 
 class Value:
-    """To be filled"""
+    """Value in the computation graph"""
 
     def __init__(self, data, _children=(), _op=""):
-        """To be filled"""
+        """initialization
+
+        Args:
+            data (int or float): data of the value
+            _children (tuple, optional): children nodes. Defaults to ().
+            _op (str, optional): operation. Defaults to "".
+        """
         self.data = data
         self.grad = 0.0
         self._backward = lambda: None
@@ -14,38 +23,72 @@ class Value:
 
     @property
     def data(self):
-        """To be filled"""
+        """Get the data of the value.
+
+        Returns:
+            int or float: data of the value
+        """
         return self.__data
 
     @data.setter
     def data(self, data):
-        """To be filled"""
+        """Set the data of the value.
+
+        Args:
+            data (int or float): data of the value
+
+        Raises:
+            TypeError: Data must be of type: int or float
+        """
         if not (isinstance(data, int) or isinstance(data, float)):
             raise TypeError("Data must be of type: int or float")
         self.__data = data
 
     @property
     def prev(self):
-        """To be filled"""
+        """Get the children nodes.
+
+        Returns:
+            set: children nodes
+        """
         return self.__prev
 
     @prev.setter
     def prev(self, children):
-        """To be filled"""
+        """Set the children nodes.
+
+        Args:
+            children (tuple): children nodes
+        """
         self.__prev = children
 
     @property
     def op(self):
-        """To be filled"""
+        """Get the operation.
+
+        Returns:
+            str: operation
+        """
         return self.__op
 
     @op.setter
     def op(self, _op):
-        """To be filled"""
+        """Set the operation.
+
+        Args:
+            _op (str): operation
+        """
         self.__op = _op
 
     def __add__(self, other):
-        """To be filled"""
+        """Define addition operation.
+
+        Args:
+            other (Value or int or float): other value
+
+        Returns:
+            Value: result of the addition
+        """
         other = other if isinstance(other, Value) else Value(data=other)
         out = Value(self.data + other.data, (self, other), "+")
 
@@ -58,7 +101,14 @@ class Value:
         return out
 
     def __mul__(self, other):
-        """To be filled"""
+        """Define multiplication operation.
+
+        Args:
+            other (Value or int or float): other value
+
+        Returns:
+            Value: result of the multiplication
+        """
         other = other if isinstance(other, Value) else Value(data=other)
         out = Value(self.data * other.data, (self, other), "*")
 
@@ -71,7 +121,14 @@ class Value:
         return out
 
     def __pow__(self, other):
-        """To be filled"""
+        """Define power operation.
+
+        Args:
+            other (Value or int or float): other value
+
+        Returns:
+            Value: result of the power operation
+        """
         other = other if isinstance(other, Value) else Value(data=other)
         out = Value(self.data**other.data, (self,), f"**{other}")
 
@@ -83,7 +140,7 @@ class Value:
         return out
 
     def backward(self):
-        """To be filled"""
+        """Backward pass."""
         topo_list = []
         visited = set()
 
@@ -101,32 +158,81 @@ class Value:
             v._backward()
 
     def __rpow__(self, other):
-        """To be filled"""
+        """Define power operation for the other value.
+
+        Args:
+            other (Value or int or float): other value
+
+        Returns:
+            Value: result of the power operation
+        """
         other = other if isinstance(other, Value) else Value(data=other)
         return other**self
 
     def __neg__(self):
-        """To be filled"""
+        """Define negation operation.
+
+        Returns:
+            Value: negation of the value
+        """
         return self * -1
 
     def __sub__(self, other):
-        """To be filled"""
+        """Subtract another value from this value.
+
+        Args:
+            other (Value or numeric): The value to subtract.
+
+        Returns:
+            Value: The result of the subtraction.
+        """
         return self + (-other)
 
     def __radd__(self, other):
-        """To be filled"""
+        """Add this value to another value (right-hand side).
+
+        Args:
+            other (Value or numeric): The value to add.
+
+        Returns:
+            Value: The result of the addition.
+        """
         return self + other
 
     def __rmul__(self, other):
-        """To be filled"""
+        """Multiply this value by another value (right-hand side).
+
+        Args:
+            other (Value or numeric): The value to multiply.
+
+        Returns:
+            Value: The result of the multiplication.
+        """
         return self * other
 
     def __rsub__(self, other):
-        """To be filled"""
+        """Subtract this value from another value (right-hand side).
+
+        Args:
+            other (Value or numeric): The value to subtract from.
+
+        Returns:
+            Value: The result of the subtraction.
+        """
         return other + (-self)
 
     def __truediv__(self, other):
-        """To be filled"""
+        """Divide this value by another value.
+
+        Args:
+            other (Value or numeric): The value to divide by.
+
+        Returns:
+            Value: The result of the division.
+
+        Raises:
+            ZeroDivisionError: If the other value is zero.
+        """
         denominator = 1
         if isinstance(other, int) or isinstance(other, float):
             denominator = other
@@ -137,12 +243,26 @@ class Value:
         return self * (other**-1)
 
     def __rtruediv__(self, other):
-        """To be filled"""
+        """Divide another value by this value (right-hand side).
+
+        Args:
+            other (Value or numeric): The value to be divided.
+
+        Returns:
+            Value: The result of the division.
+
+        Raises:
+            ZeroDivisionError: If this value is zero.
+        """
         denominator = self.data
         if denominator == 0:
             raise ZeroDivisionError("Can't divide by zero.")
         return other * (self**-1)
 
     def __repr__(self):
-        """To be filled"""
+        """Representation of the value.
+
+        Returns:
+            str: representation of the value
+        """
         return f"Value(data={self.data})"

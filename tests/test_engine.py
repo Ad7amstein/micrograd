@@ -1,4 +1,4 @@
-"""To be filled"""
+"""Test the engine module."""
 
 import unittest
 from micrograd.engine import Value
@@ -6,10 +6,27 @@ from pycodestyle import Checker
 
 
 class TestEngine(unittest.TestCase):
-    """To be filled"""
+    """Test the engine module."""
 
     def test_doc(self):
-        """To be filled"""
+        """Test the documentation."""
+        self.assertIsNotNone(Value.__doc__)
+        self.assertIsNotNone(Value.__init__.__doc__)
+        self.assertIsNotNone(Value.data.__doc__)
+        self.assertIsNotNone(Value.prev.__doc__)
+        self.assertIsNotNone(Value.op.__doc__)
+        self.assertIsNotNone(Value.__add__.__doc__)
+        self.assertIsNotNone(Value.__radd__.__doc__)
+        self.assertIsNotNone(Value.__mul__.__doc__)
+        self.assertIsNotNone(Value.__rmul__.__doc__)
+        self.assertIsNotNone(Value.__neg__.__doc__)
+        self.assertIsNotNone(Value.__sub__.__doc__)
+        self.assertIsNotNone(Value.__rsub__.__doc__)
+        self.assertIsNotNone(Value.__pow__.__doc__)
+        self.assertIsNotNone(Value.__truediv__.__doc__)
+        self.assertIsNotNone(Value.__rtruediv__.__doc__)
+        self.assertIsNotNone(Value.backward.__doc__)
+        self.assertIsNotNone(Value.__repr__.__doc__)
 
     def test_pycodestyle(self):
         """Test the pycodestyle."""
@@ -19,14 +36,14 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(file_errors, 0)
 
     def test_init(self):
-        """To be filled"""
+        """Test the initialization of the Value class."""
         val = Value(data=5)
         self.assertIsInstance(val, Value)
         self.assertEqual(val.data, 5)
         self.assertEqual(val.grad, 0)
 
     def test_data(self):
-        """To be filled"""
+        """Test the data property of the Value class."""
         with self.assertRaises(TypeError):
             _ = Value(data="5")
             _ = Value(data=[3])
@@ -34,7 +51,7 @@ class TestEngine(unittest.TestCase):
             _ = Value(data={4.2})
 
     def test_repr(self):
-        """To be filled"""
+        """Test the __repr__ method of the Value class."""
         val1 = Value(data=2.9)
         str_repr1 = repr(val1)
         self.assertIsInstance(str_repr1, str)
@@ -51,7 +68,7 @@ class TestEngine(unittest.TestCase):
         self.assertIsNot(val1, val2)
 
     def test_add(self):
-        """To be filled"""
+        """Test the __add__ method of the Value class."""
         val1 = Value(data=3.2)
         val2 = Value(data=5.9)
         val3 = val1 + val2
@@ -73,7 +90,7 @@ class TestEngine(unittest.TestCase):
         self.assertAlmostEqual(val6.data, 6.9)
 
     def test_mul(self):
-        """To be filled"""
+        """Test the __mul__ method of the Value class."""
         val1 = Value(data=3.2)
         val2 = Value(data=5.9)
         val3 = val1 * val2
@@ -101,7 +118,7 @@ class TestEngine(unittest.TestCase):
         self.assertAlmostEqual(val8.data, -22.4)
 
     def test_neg(self):
-        """To be filled"""
+        """Test the __neg__ method of the Value class."""
         val = Value(data=10)
         self.assertEqual(val.data, 10)
         self.assertIsInstance(-val, Value)
@@ -110,7 +127,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(val2.data, -10)
 
     def test_sub(self):
-        """To be filled"""
+        """Test the __sub__ method of the Value class."""
         val1 = Value(data=3.2)
         val2 = Value(data=5.9)
         val3 = val1 - val2
@@ -141,7 +158,7 @@ class TestEngine(unittest.TestCase):
         self.assertAlmostEqual(val8.data, 2.8)
 
     def test_pow(self):
-        """To be filled"""
+        """Test the __pow__ method of the Value class."""
         val1 = Value(data=2)
         val2 = Value(data=3.2)
 
@@ -177,7 +194,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(val3.data, -0.5)
 
     def test_div(self):
-        """To be filled"""
+        """Test the __truediv__ method of the Value class."""
         val1 = Value(data=7)
         val2 = Value(data=3.2)
 
@@ -220,7 +237,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(val3.data, 7)
 
     def test_children(self):
-        """To be filled"""
+        """Test the prev property of the Value class."""
         val1 = Value(5)
         self.assertIsInstance(val1.prev, set)
         self.assertEqual(val1.prev, set())
@@ -236,7 +253,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(val3.prev, set((val2,)))
 
     def test_op(self):
-        """To be filled"""
+        """Test the op property of the Value class."""
         val1 = Value(4)
         self.assertIsInstance(val1.op, str)
         self.assertEqual(val1.op, "")
@@ -254,7 +271,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(val3.op, f"**{val2}")
 
     def test_backward(self):
-        """To be filled"""
+        """Test the backward method of the Value class."""
         val1 = Value(2)
         self.assertEqual(val1.grad, 0)
         val2 = Value(3)
