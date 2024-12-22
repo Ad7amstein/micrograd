@@ -19,6 +19,12 @@ class TestNNModule(unittest.TestCase):
         self.assertIsNotNone(Neuron.__call__.__doc__)
         self.assertIsNotNone(Neuron.parameters.__doc__)
         self.assertIsNotNone(Neuron.__repr__.__doc__)
+        self.assertIsNotNone(Layer.__doc__)
+        self.assertIsNotNone(Layer.__init__.__doc__)
+        self.assertIsNotNone(Layer.__call__.__doc__)
+        self.assertIsNotNone(Layer.parameters.__doc__)
+        self.assertIsNotNone(Layer.__repr__.__doc__)
+
 
     def test_pycodestyle(self):
         """Test the pycodestyle."""
