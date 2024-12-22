@@ -2,7 +2,7 @@
 
 import unittest
 from micrograd.engine import Value
-from micrograd.nn import Module, Neuron
+from micrograd.nn import Module, Neuron, Layer
 from pycodestyle import Checker
 
 
@@ -28,13 +28,13 @@ class TestNNModule(unittest.TestCase):
         self.assertEqual(file_errors, 0)
 
     def test_module(self):
-        """To be added"""
+        """test module"""
         module = Module()
         self.assertIsInstance(module.parameters(), list)
         self.assertListEqual(module.parameters(), [])
 
     def test_neuron(self):
-        """To be added"""
+        """test neuron"""
         node = Neuron(nin=3)
         self.assertIsInstance(node.w, list)
         self.assertIsInstance(node.b, Value)
@@ -45,13 +45,13 @@ class TestNNModule(unittest.TestCase):
         self.assertIsInstance(node.w[0], Value)
         self.assertIsInstance(node.w[1], Value)
         self.assertIsInstance(node.w[2], Value)
-        self.assertEqual(node.act, 'Linear')
+        self.assertEqual(node.act, "Linear")
 
         with self.assertRaises(TypeError):
             _ = Neuron(nin=1, activation=3)
 
         with self.assertRaises(ValueError):
-            _ = Neuron(nin=1, activation='adham')
+            _ = Neuron(nin=1, activation="adham")
 
         x = [1, 2, 3]
         val = node(x)
@@ -83,3 +83,30 @@ class TestNNModule(unittest.TestCase):
         self.assertEqual(node_params_zeros[1].grad, 0)
         self.assertEqual(node_params_zeros[2].grad, 0)
         self.assertEqual(node_params_zeros[3].grad, 0)
+
+    def test_layer(self):
+        """test layer"""
+        layer = Layer(nin=3, nout=2)
+        self.assertIsInstance(layer.neurons, list)
+        self.assertEqual(len(layer.neurons), 2)
+        self.assertIsInstance(layer.neurons[0], Neuron)
+        self.assertIsInstance(layer.neurons[1], Neuron)
+
+        layer_params = layer.parameters()
+        self.assertIsInstance(layer_params, list)
+        self.assertEqual(len(layer_params), 8)
+        self.assertIsInstance(layer_params[0], Value)
+        self.assertIsInstance(layer_params[1], Value)
+        self.assertIsInstance(layer_params[2], Value)
+        self.assertIsInstance(layer_params[3], Value)
+        self.assertIsInstance(layer_params[4], Value)
+        self.assertIsInstance(layer_params[5], Value)
+
+        layer_str_repr = repr(layer)
+        self.assertEqual(layer_str_repr, "Layer(nin=3, nout=2)")
+
+        layer_output = layer([1, 2, 3])
+        self.assertIsInstance(layer_output, list)
+        self.assertEqual(len(layer_output), 2)
+        self.assertIsInstance(layer_output[0], Value)
+        self.assertIsInstance(layer_output[1], Value)
