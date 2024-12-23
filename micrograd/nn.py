@@ -98,14 +98,14 @@ class Neuron(Module):
 class Layer(Module):
     """Represents a layer of neurons"""
 
-    def __init__(self, nin, nout):
+    def __init__(self, nin, nout, act="Linear"):
         """Initialize layer
 
         Args:
             nin (int): number of input neurons
             nout (int): number of output neurons
         """
-        self.neurons = [Neuron(nin) for _ in range(nout)]
+        self.neurons = [Neuron(nin, act) for _ in range(nout)]
 
     def __call__(self, x):
         """Forward pass of the layer
@@ -137,3 +137,31 @@ class Layer(Module):
             f"Layer(nin={len(self.neurons[0].parameters())-1},"
             f" nout={len(self.neurons)})"
         )
+
+
+class MLP(Module):
+    """To be filled"""
+
+    def __init__(self, nin, nouts):
+        """To be filled"""
+        sz = [nin] + nouts
+        self.layers = [
+            Layer(
+                nin=sz[i],
+                nout=sz[i + 1],
+                act="Linear") for i in range(len(sz) - 1)
+        ]
+
+    def __call__(self, x):
+        """To be filled"""
+        for layer in self.layers:
+            x = layer(x)
+        return x
+
+    def parameters(self):
+        """To be filled"""
+        return [p for layer in self.layers for p in layer.parameters()]
+
+    def __str__(self):
+        """To be filled"""
+        return f"MLP of [{', '.join(str(layer) for layer in self.layers)}]"
