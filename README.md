@@ -2,10 +2,8 @@
 
 ## WIP
 
-- Engine (Value Class): add `relu` and `tanh` functions
-- Testing: add tests for nn module
+- Add a demo notebook
 
 ## To-Do
 
-- NN Module (MLP Class)
 - documentation: make a nice README :)
