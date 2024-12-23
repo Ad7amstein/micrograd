@@ -3,6 +3,8 @@ This is the main file for the micrograd engine,
 which is a simple autograd engine for educational purposes.
 """
 
+import math
+
 
 class Value:
     """Value in the computation graph"""
@@ -79,6 +81,38 @@ class Value:
             _op (str): operation
         """
         self.__op = _op
+
+    def tanh(self):
+        """Hyperbolic tangent function.
+
+        Returns:
+            Value: result of the tanh operation
+        """
+        x = self.data
+        t = (math.exp(x) - math.exp(-x)) / (math.exp(x) + math.exp(-x))
+        out = Value(t, (self,), "tanh")
+
+        def _backward():
+            self.grad += (1 - t**2) * out.grad
+
+        out._backward = _backward
+
+        return out
+
+    def relu(self):
+        """Rectified linear unit function.
+
+        Returns:
+            Value: result of the ReLU operation
+        """
+        out = Value(0 if self.data < 0 else self.data, (self,), "ReLU")
+
+        def _backward():
+            self.grad += (out.data > 0) * out.grad
+
+        out._backward = _backward
+
+        return out
 
     def __add__(self, other):
         """Define addition operation.
