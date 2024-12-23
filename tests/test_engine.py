@@ -335,3 +335,31 @@ class TestEngine(unittest.TestCase):
         self.assertAlmostEqual(c.grad, -2)
         self.assertAlmostEqual(a.grad, 6)
         self.assertAlmostEqual(b.grad, -4)
+
+    def test_tanh(self):
+        """Test the tanh method of the Value class."""
+        val = Value(0)
+        self.assertIsInstance(val.tanh(), Value)
+        self.assertAlmostEqual(val.tanh().data, 0)
+
+        val = Value(1)
+        self.assertIsInstance(val.tanh(), Value)
+        self.assertAlmostEqual(val.tanh().data, 0.7615941559557649)
+
+        val = Value(-1)
+        self.assertIsInstance(val.tanh(), Value)
+        self.assertAlmostEqual(val.tanh().data, -0.7615941559557649)
+
+    def test_relu(self):
+        """Test the relu method of the Value class."""
+        val = Value(0)
+        self.assertIsInstance(val.relu(), Value)
+        self.assertEqual(val.relu().data, 0)
+
+        val = Value(1)
+        self.assertIsInstance(val.relu(), Value)
+        self.assertEqual(val.relu().data, 1)
+
+        val = Value(-1)
+        self.assertIsInstance(val.relu(), Value)
+        self.assertEqual(val.relu().data, 0)

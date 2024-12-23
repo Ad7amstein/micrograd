@@ -2,7 +2,7 @@
 
 import unittest
 from micrograd.engine import Value
-from micrograd.nn import Module, Neuron, Layer
+from micrograd.nn import Module, Neuron, Layer, MLP
 from pycodestyle import Checker
 
 
@@ -116,3 +116,25 @@ class TestNNModule(unittest.TestCase):
         self.assertEqual(len(layer_output), 2)
         self.assertIsInstance(layer_output[0], Value)
         self.assertIsInstance(layer_output[1], Value)
+
+    def test_mlp(self):
+        """test mlp"""
+        mlp = MLP(nin=3, nouts=[2, 1])
+        self.assertIsInstance(mlp.layers, list)
+        self.assertEqual(len(mlp.layers), 2)
+        self.assertIsInstance(mlp.layers[0], Layer)
+        self.assertIsInstance(mlp.layers[1], Layer)
+
+        mlp_params = mlp.parameters()
+        self.assertIsInstance(mlp_params, list)
+        self.assertEqual(len(mlp_params), 11)
+        for i in range(11):
+            self.assertIsInstance(mlp_params[i], Value)
+
+        mlp_output = mlp([1, 2, 3])
+        self.assertIsInstance(mlp_output, Value)
+
+        # test str
+        mlp_str_repr = str(mlp)
+        self.assertEqual(mlp_str_repr,
+                         "MLP of [Layer(nin=3, nout=2), Layer(nin=2, nout=1)]")
