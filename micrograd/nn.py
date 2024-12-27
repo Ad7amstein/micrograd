@@ -59,10 +59,10 @@ class Neuron(Module):
         """
         if not isinstance(act, str):
             raise TypeError("Activation must be of type: str")
-        if act not in ["Linear"]:
+        if act not in ["Linear", "relu", "tanh"]:
             raise ValueError(
                 "Not supported activation, Current available activations are:\
-                \n (Linear,)"
+                \n (Linear, relu, tanh)"
             )
         self.__act = act
 
@@ -76,7 +76,12 @@ class Neuron(Module):
             Value: output value
         """
         out = sum((wi * xi for wi, xi in zip(self.w, x)), self.b)
-        return out
+        if self.act == "relu":
+            return out.relu()
+        elif self.act == "tanh":
+            return out.tanh()
+        else:
+            return out
 
     def parameters(self):
         """Return all parameters
@@ -142,15 +147,18 @@ class Layer(Module):
 class MLP(Module):
     """To be filled"""
 
-    def __init__(self, nin, nouts):
+    def __init__(self, nin: int, nouts: list, act: str = "Linear"):
         """To be filled"""
         sz = [nin] + nouts
         self.layers = [
             Layer(
                 nin=sz[i],
                 nout=sz[i + 1],
-                act="Linear") for i in range(len(sz) - 1)
+                act=act) for i in range(len(sz) - 2)
         ]
+        self.layers.append(Layer(nin=sz[len(sz)-2], nout=sz[len(sz)-1], act='Linear'))
+        # sz = [nin] + nouts
+        # self.layers = [Layer(sz[i], sz[i+1], nonlin=i!=len(nouts)-1) for i in range(len(nouts))]
 
     def __call__(self, x):
         """To be filled"""
